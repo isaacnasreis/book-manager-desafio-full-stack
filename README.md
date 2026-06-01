@@ -17,7 +17,6 @@ As páginas internas devem ser protegidas por autenticação.
 ## Tecnologias Obrigatórias
 - Java + Spring Boot (backend)
 - Livre escolha (frontend)
-- TypeScript
 - Postgres ou MySQL
   
 ## Requisitos do Backend
