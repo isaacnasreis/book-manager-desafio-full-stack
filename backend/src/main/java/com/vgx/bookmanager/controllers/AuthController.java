@@ -15,9 +15,9 @@ import lombok.RequiredArgsConstructor;
 // import com.vgx.bookmanager.entities.User;
 // import com.vgx.bookmanager.repositories.UserRepository;
 // import com.vgx.bookmanager.security.JwtService;
-// import com.vgx.bookmanager.dtos.AuthRequestDTO;
-// import com.vgx.bookmanager.dtos.AuthResponseDTO;
-// import com.vgx.bookmanager.dtos.RegisterRequestDTO;
+import com.vgx.bookmanager.dtos.AuthRequestDTO;
+import com.vgx.bookmanager.dtos.AuthResponseDTO;
+import com.vgx.bookmanager.dtos.RegisterRequestDTO;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,7 +29,7 @@ public class AuthController {
     // private final PasswordEncoder passwordEncoder;
 
     @PostMapping("/auth/register")
-    public ResponseEntity<?> register(/* @Valid @RequestBody RegisterRequestDTO registerDto */) {
+    public ResponseEntity<?> register(@Valid @RequestBody RegisterRequestDTO registerDto) {
 
         // Exemplo de implementação real (descomentar futuramente):
         // if (userRepository.findByEmail(registerDto.getEmail()).isPresent()) {
@@ -48,7 +48,7 @@ public class AuthController {
     }
 
     @PostMapping("/auth/login")
-    public ResponseEntity<?> login(/* @Valid @RequestBody AuthRequestDTO loginDto */) {
+    public ResponseEntity<?> login(@Valid @RequestBody AuthRequestDTO loginDto) {
 
         // Exemplo de implementação real (descomentar futuramente):
         // Authentication authentication = authenticationManager.authenticate(
