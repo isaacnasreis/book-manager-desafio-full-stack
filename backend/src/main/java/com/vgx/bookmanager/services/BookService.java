@@ -29,7 +29,7 @@ public class BookService {
 
     public Book findById(Long id) {
         return bookRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Livro não encontrado com ID: " + id));
+                .orElseThrow(() -> new com.vgx.bookmanager.exceptions.ResourceNotFoundException("Livro não encontrado com ID: " + id));
     }
 
     public Book create(BookDTO bookDTO) {
