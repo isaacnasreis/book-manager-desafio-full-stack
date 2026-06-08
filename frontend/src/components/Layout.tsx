@@ -1,7 +1,7 @@
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import { useContext } from 'react';
 import { AuthContext } from '../contexts/AuthContext';
-import { BookMarked, LogOut, LayoutDashboard } from 'lucide-react';
+import { BookMarked, LogOut } from 'lucide-react';
 
 export function Layout() {
   const { signOut } = useContext(AuthContext);
@@ -9,7 +9,6 @@ export function Layout() {
 
   const navItems = [
     { name: 'Meus Livros', path: '/books', icon: BookMarked },
-    { name: 'Dashboard', path: '#', icon: LayoutDashboard }, // Apenas decorativo por enquanto
   ];
 
   return (
@@ -31,7 +30,7 @@ export function Layout() {
               Menu Principal
             </p>
             {navItems.map((item) => {
-              const isActive = location.pathname.startsWith(item.path) && item.path !== '#';
+              const isActive = location.pathname.startsWith(item.path);
               const Icon = item.icon;
               return (
                 <Link

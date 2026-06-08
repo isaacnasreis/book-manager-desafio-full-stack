@@ -44,8 +44,7 @@ export function BookForm() {
         try {
             const response = await api.get(`/books/${id}`);
             reset(response.data);
-        } catch (error) {
-            console.error("Erro ao buscar livro:", error);
+        } catch {
             setSubmitError("Não foi possível carregar os dados do livro.");
         } finally {
             setIsFetching(false);
@@ -62,8 +61,7 @@ export function BookForm() {
                 await api.post('/books/create', data);
             }
             navigate('/books');
-        } catch (error) {
-            console.error("Erro ao salvar livro:", error);
+        } catch {
             setSubmitError("Erro ao salvar o livro. Tente novamente.");
         } finally {
             setIsLoading(false);

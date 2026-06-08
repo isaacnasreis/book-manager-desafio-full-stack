@@ -34,9 +34,8 @@ export function Login() {
         try {
             await signIn(data.email, data.password);
             navigate('/books', { replace: true, state: {} });
-        } catch (error) {
+        } catch {
             setAuthError("E-mail ou senha incorretos.");
-            console.error(error);
         } finally {
             setIsLoading(false);
         }

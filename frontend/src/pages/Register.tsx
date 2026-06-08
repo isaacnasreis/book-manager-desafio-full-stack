@@ -4,6 +4,7 @@ import { z } from 'zod';
 import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { Loader2 } from 'lucide-react';
+import { isAxiosError } from 'axios';
 import floatingBooks from '../assets/floating-books.png';
 import { api } from '../services/api';
 
@@ -38,13 +39,12 @@ export function Register() {
             navigate('/login', { 
                 state: { message: "Conta criada com sucesso! Faça login para continuar." } 
             });
-        } catch (error: any) {
-            if (error.response?.status === 400 && error.response?.data?.message?.includes('already exists')) {
+        } catch (error) {
+            if (isAxiosError(error) && error.response?.status === 400) {
                  setAuthError("Este e-mail já está em uso.");
             } else {
                  setAuthError("Erro ao criar conta. Tente novamente mais tarde.");
             }
-            console.error(error);
         } finally {
             setIsLoading(false);
         }

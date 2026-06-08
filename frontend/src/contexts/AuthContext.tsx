@@ -39,6 +39,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     localStorage.removeItem('@BookManager:token');
     delete api.defaults.headers.common['Authorization'];
     setIsAuthenticated(false);
+    window.location.href = '/login';
   }
 
   if (loading) {

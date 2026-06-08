@@ -44,11 +44,10 @@ export function BookList() {
             } else {
                 setBooks([]);
             }
-        } catch (error: any) {
-            if (error.name === 'CanceledError' || error.message?.includes('canceled')) {
+        } catch (error: unknown) {
+            if (error instanceof Error && error.name === 'CanceledError') {
                 return;
             }
-            console.error("Erro ao buscar livros:", error);
         } finally {
             if (!signal?.aborted) {
                 setLoading(false);
@@ -68,8 +67,8 @@ export function BookList() {
             await api.delete(`/books/${bookToDelete}`);
             setBooks(prev => prev.filter(b => b.id !== bookToDelete));
             setBookToDelete(null);
-        } catch (error) {
-            console.error("Erro ao excluir livro:", error);
+        } catch {
+            // Erro tratado pelo interceptor do Axios
         } finally {
             setIsDeleting(false);
         }
