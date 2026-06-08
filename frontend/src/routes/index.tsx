@@ -1,5 +1,6 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { Login } from '../pages/Login';
+import { Register } from '../pages/Register';
 import { BookList } from '../pages/BookList';
 import { BookForm } from '../pages/BookForm';
 import { PrivateRoute } from './PrivateRoute';
@@ -11,6 +12,7 @@ export function AppRoutes() {
       {/* Rotas Públicas */}
       <Route path="/" element={<Navigate to="/books" replace />} />
       <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
 
       {/* Rotas Privadas (Protegidas) */}
       <Route element={<PrivateRoute />}>
