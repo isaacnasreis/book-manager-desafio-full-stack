@@ -10,10 +10,13 @@ import com.vgx.bookmanager.entities.Book;
 import com.vgx.bookmanager.services.BookService;
 import com.vgx.bookmanager.dtos.BookDTO;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
+@SecurityRequirement(name = "Bearer Authentication")
 public class BookController {
 
     private final BookService bookService;
