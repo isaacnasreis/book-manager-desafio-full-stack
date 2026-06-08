@@ -1,10 +1,10 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useContext, useState } from 'react';
 import { AuthContext } from '../contexts/AuthContext';
-import { Loader2 } from 'lucide-react';
+import { Loader2, CheckCircle2 } from 'lucide-react';
 import floatingBooks from '../assets/floating-books.png';
 
 const loginSchema = z.object({
@@ -21,6 +21,10 @@ export function Login() {
 
     const { signIn } = useContext(AuthContext);
     const navigate = useNavigate();
+    const location = useLocation();
+    
+    const successMessage = location.state?.message;
+
     const [authError, setAuthError] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
 
@@ -29,7 +33,7 @@ export function Login() {
         setIsLoading(true);
         try {
             await signIn(data.email, data.password);
-            navigate('/books');
+            navigate('/books', { replace: true, state: {} });
         } catch (error) {
             setAuthError("E-mail ou senha incorretos.");
             console.error(error);
@@ -75,7 +79,7 @@ export function Login() {
                 {/* LADO DIREITO — Formulário de Login */}
                 <div className="w-full lg:w-1/2 xl:w-[45%] h-full flex items-center justify-center px-6 sm:px-12 lg:px-16">
                     <div className="w-full max-w-sm">
-                        <div className="mb-10">
+                        <div className="mb-8">
                             <p className="text-xs font-bold text-cyan-500/70 tracking-[0.2em] uppercase mb-4">
                                 Book Manager
                             </p>
@@ -86,6 +90,13 @@ export function Login() {
                                 Faça login para acessar sua biblioteca.
                             </p>
                         </div>
+
+                        {successMessage && !authError && (
+                            <div className="mb-6 flex items-center gap-3 text-emerald-400 text-sm bg-emerald-500/10 p-4 rounded-xl border border-emerald-500/20">
+                                <CheckCircle2 className="w-5 h-5 flex-shrink-0" />
+                                <span>{successMessage}</span>
+                            </div>
+                        )}
 
                         <form onSubmit={handleSubmit(handleLogin)} className="space-y-5">
                             <div className="space-y-1.5">
