@@ -6,7 +6,7 @@ export default function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
-        <div className="min-h-screen bg-gray-900 text-gray-100 font-sans">
+        <div className="min-h-screen font-sans antialiased">
           <AppRoutes />
         </div>
       </AuthProvider>
