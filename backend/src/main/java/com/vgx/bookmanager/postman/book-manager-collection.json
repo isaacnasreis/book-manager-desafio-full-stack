@@ -1,0 +1,282 @@
+{
+  "info": {
+    "_postman_id": "93ed5bab-8363-4742-b86d-8c75fe3dabdc",
+    "name": "Book Manager API",
+    "description": "This collection contains the main endpoints for interacting with the Book Manager API. It covers user authentication and the complete book management workflow, including creating users, logging in, adding new books, listing all books, retrieving a book by ID, searching books by title with pagination, updating existing books, and deleting books.\n\nIt is intended to support development, testing, and validation of the API’s core features in a local environment.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "27016607"
+  },
+  "item": [
+    {
+      "name": "Criar um Usuário",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"email\": \"teste@vgxlabs.com\",\r\n  \"password\": \"senha-segura\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/auth/register",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "auth",
+            "register"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Fazer Login",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"email\": \"teste@vgxlabs.com\",\r\n  \"password\": \"senha-segura\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/auth/login",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "auth",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Criar um Livro",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0ZUB2Z3hsYWJzLmNvbSIsImlhdCI6MTc4MDg3Njk1NywiZXhwIjoxNzgwOTYzMzU3fQ.4DdoUK3lI9PyoxjqoAZEqzPfFLq9vgSfqoceALnfgDE",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"title\": \"Arquitetura Limpa\",\r\n  \"author\": \"Robert C. Martin\",\r\n  \"year\": 2012,\r\n  \"description\": \"O guia do artesão para estrutura e design de software.\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/books/create",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "books",
+            "create"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Listar os Livros",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0ZUB2Z3hsYWJzLmNvbSIsImlhdCI6MTc4MDg3Njk1NywiZXhwIjoxNzgwOTYzMzU3fQ.4DdoUK3lI9PyoxjqoAZEqzPfFLq9vgSfqoceALnfgDE",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/books",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "books"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Buscar com Título Opcional",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0ZUB2Z3hsYWJzLmNvbSIsImlhdCI6MTc4MDg3Njk1NywiZXhwIjoxNzgwOTYzMzU3fQ.4DdoUK3lI9PyoxjqoAZEqzPfFLq9vgSfqoceALnfgDE",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/books?title=Limpa&page=0&size=10",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "books"
+          ],
+          "query": [
+            {
+              "key": "title",
+              "value": "Limpa"
+            },
+            {
+              "key": "page",
+              "value": "0"
+            },
+            {
+              "key": "size",
+              "value": "10"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Buscar Livro por ID",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0ZUB2Z3hsYWJzLmNvbSIsImlhdCI6MTc4MDg3Njk1NywiZXhwIjoxNzgwOTYzMzU3fQ.4DdoUK3lI9PyoxjqoAZEqzPfFLq9vgSfqoceALnfgDE",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/books/1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "books",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Atualizar um Livro",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0ZUB2Z3hsYWJzLmNvbSIsImlhdCI6MTc4MDg3Njk1NywiZXhwIjoxNzgwOTYzMzU3fQ.4DdoUK3lI9PyoxjqoAZEqzPfFLq9vgSfqoceALnfgDE",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"title\": \"Arquitetura Limpa - Edição Revisada\",\r\n  \"author\": \"Robert C. Martin (Uncle Bob)\",\r\n  \"year\": 2024,\r\n  \"description\": \"O guia definitivo e atualizado para a estrutura de software.\"\r\n}\r\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/books/1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "books",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Deletar um Livro",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0ZUB2Z3hsYWJzLmNvbSIsImlhdCI6MTc4MDg3Njk1NywiZXhwIjoxNzgwOTYzMzU3fQ.4DdoUK3lI9PyoxjqoAZEqzPfFLq9vgSfqoceALnfgDE",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/books/1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "books",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
