@@ -3,6 +3,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useContext, useState } from 'react';
+import toast from 'react-hot-toast';
 import { AuthContext } from '../contexts/AuthContext';
 import { Loader2, CheckCircle2 } from 'lucide-react';
 import floatingBooks from '../assets/floating-books.png';
@@ -36,6 +37,7 @@ export function Login() {
             navigate('/books', { replace: true, state: {} });
         } catch {
             setAuthError("E-mail ou senha incorretos.");
+            toast.error('Credenciais inválidas.');
         } finally {
             setIsLoading(false);
         }

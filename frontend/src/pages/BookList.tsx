@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { api } from '../services/api';
 import { Link } from 'react-router-dom';
+import toast from 'react-hot-toast';
 import { Search, Plus, BookOpen } from 'lucide-react';
 import { ConfirmModal } from '../components/ConfirmModal';
 import { BookCard } from '../components/BookCard';
@@ -67,8 +68,9 @@ export function BookList() {
             await api.delete(`/books/${bookToDelete}`);
             setBooks(prev => prev.filter(b => b.id !== bookToDelete));
             setBookToDelete(null);
+            toast.success('Livro excluído com sucesso!');
         } catch {
-            // Erro tratado pelo interceptor do Axios
+            toast.error('Erro ao excluir o livro.');
         } finally {
             setIsDeleting(false);
         }

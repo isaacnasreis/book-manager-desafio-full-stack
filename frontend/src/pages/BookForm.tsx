@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useNavigate, useParams, Link } from 'react-router-dom';
+import toast from 'react-hot-toast';
 import { api } from '../services/api';
 import { Loader2, ArrowLeft, BookOpen, Save } from 'lucide-react';
 
@@ -60,8 +61,10 @@ export function BookForm() {
             } else {
                 await api.post('/books/create', data);
             }
+            toast.success(isEditing ? 'Livro atualizado com sucesso!' : 'Livro adicionado com sucesso!');
             navigate('/books');
         } catch {
+            toast.error('Erro ao salvar o livro.');
             setSubmitError("Erro ao salvar o livro. Tente novamente.");
         } finally {
             setIsLoading(false);

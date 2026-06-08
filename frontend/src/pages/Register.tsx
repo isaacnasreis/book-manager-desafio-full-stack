@@ -4,6 +4,7 @@ import { z } from 'zod';
 import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { Loader2 } from 'lucide-react';
+import toast from 'react-hot-toast';
 import { isAxiosError } from 'axios';
 import floatingBooks from '../assets/floating-books.png';
 import { api } from '../services/api';
@@ -36,14 +37,17 @@ export function Register() {
                 email: data.email,
                 password: data.password
             });
+            toast.success('Conta criada com sucesso!');
             navigate('/login', { 
                 state: { message: "Conta criada com sucesso! Faça login para continuar." } 
             });
         } catch (error) {
             if (isAxiosError(error) && error.response?.status === 400) {
                  setAuthError("Este e-mail já está em uso.");
+                 toast.error('Este e-mail já está em uso.');
             } else {
                  setAuthError("Erro ao criar conta. Tente novamente mais tarde.");
+                 toast.error('Erro ao criar conta.');
             }
         } finally {
             setIsLoading(false);
