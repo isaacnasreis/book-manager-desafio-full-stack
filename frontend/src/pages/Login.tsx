@@ -4,6 +4,7 @@ import { z } from 'zod';
 import { Link, useNavigate } from 'react-router-dom';
 import { useContext, useState } from 'react';
 import { AuthContext } from '../contexts/AuthContext';
+import { Loader2 } from 'lucide-react';
 import floatingBooks from '../assets/floating-books.png';
 
 const loginSchema = z.object({
@@ -21,15 +22,19 @@ export function Login() {
     const { signIn } = useContext(AuthContext);
     const navigate = useNavigate();
     const [authError, setAuthError] = useState<string | null>(null);
+    const [isLoading, setIsLoading] = useState(false);
 
     async function handleLogin(data: LoginFormInputs) {
         setAuthError(null);
+        setIsLoading(true);
         try {
             await signIn(data.email, data.password);
             navigate('/books');
         } catch (error) {
             setAuthError("E-mail ou senha incorretos.");
             console.error(error);
+        } finally {
+            setIsLoading(false);
         }
     }
 
@@ -42,7 +47,7 @@ export function Login() {
                 className="absolute inset-0 w-full h-full object-cover opacity-40 pointer-events-none"
             />
 
-            {/* Overlay gradiente*/}
+            {/* Overlay gradiente */}
             <div className="absolute inset-0 bg-gradient-to-r from-[#050B14]/40 via-transparent to-[#050B14] z-[1]" />
             <div className="absolute inset-0 bg-gradient-to-t from-[#050B14] via-[#050B14]/50 to-transparent z-[2]" />
 
@@ -91,8 +96,9 @@ export function Login() {
                                     id="email"
                                     type="email"
                                     placeholder="exemplo@email.com"
+                                    disabled={isLoading}
                                     {...register('email')}
-                                    className="w-full px-4 py-3 bg-white/[0.05] border border-white/10 rounded-xl text-white placeholder:text-slate-600 focus:outline-none focus:border-cyan-500/50 focus:bg-white/[0.08] transition-all duration-200"
+                                    className="w-full px-4 py-3 bg-white/[0.05] border border-white/10 rounded-xl text-white placeholder:text-slate-600 focus:outline-none focus:border-cyan-500/50 focus:bg-white/[0.08] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                                 />
                                 {errors.email && (
                                     <span className="text-red-400 text-xs ml-1 block">{errors.email.message}</span>
@@ -107,8 +113,9 @@ export function Login() {
                                     id="password"
                                     type="password"
                                     placeholder="••••••••"
+                                    disabled={isLoading}
                                     {...register('password')}
-                                    className="w-full px-4 py-3 bg-white/[0.05] border border-white/10 rounded-xl text-white placeholder:text-slate-600 focus:outline-none focus:border-cyan-500/50 focus:bg-white/[0.08] transition-all duration-200"
+                                    className="w-full px-4 py-3 bg-white/[0.05] border border-white/10 rounded-xl text-white placeholder:text-slate-600 focus:outline-none focus:border-cyan-500/50 focus:bg-white/[0.08] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                                 />
                                 {errors.password && (
                                     <span className="text-red-400 text-xs ml-1 block">{errors.password.message}</span>
@@ -124,12 +131,22 @@ export function Login() {
                             <div className="pt-3">
                                 <button
                                     type="submit"
-                                    className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-cyan-600 to-cyan-500 hover:from-cyan-500 hover:to-cyan-400 text-white font-semibold py-3.5 rounded-full shadow-lg shadow-cyan-500/20 hover:shadow-cyan-500/30 transition-all duration-200 active:scale-[0.97] cursor-pointer"
+                                    disabled={isLoading}
+                                    className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-cyan-600 to-cyan-500 hover:from-cyan-500 hover:to-cyan-400 text-white font-semibold py-3.5 rounded-full shadow-lg shadow-cyan-500/20 hover:shadow-cyan-500/30 transition-all duration-200 active:scale-[0.97] cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed disabled:active:scale-100"
                                 >
-                                    Entrar
-                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                                    </svg>
+                                    {isLoading ? (
+                                        <>
+                                            <Loader2 className="w-5 h-5 animate-spin" />
+                                            <span>Entrando...</span>
+                                        </>
+                                    ) : (
+                                        <>
+                                            Entrar
+                                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                                                <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                                            </svg>
+                                        </>
+                                    )}
                                 </button>
                             </div>
                         </form>

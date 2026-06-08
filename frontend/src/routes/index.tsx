@@ -3,6 +3,7 @@ import { Login } from '../pages/Login';
 import { BookList } from '../pages/BookList';
 import { BookForm } from '../pages/BookForm';
 import { PrivateRoute } from './PrivateRoute';
+import { Layout } from '../components/Layout';
 
 export function AppRoutes() {
   return (
@@ -13,9 +14,11 @@ export function AppRoutes() {
 
       {/* Rotas Privadas (Protegidas) */}
       <Route element={<PrivateRoute />}>
-        <Route path="/books" element={<BookList />} />
-        <Route path="/books/new" element={<BookForm />} />
-        <Route path="/books/:id/edit" element={<BookForm />} />
+        <Route element={<Layout />}>
+          <Route path="/books" element={<BookList />} />
+          <Route path="/books/new" element={<BookForm />} />
+          <Route path="/books/:id/edit" element={<BookForm />} />
+        </Route>
       </Route>
 
       {/* Rota Fallback */}
