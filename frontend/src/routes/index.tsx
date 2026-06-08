@@ -1,0 +1,25 @@
+import { Routes, Route, Navigate } from 'react-router-dom';
+import { Login } from '../pages/Login';
+import { BookList } from '../pages/BookList';
+import { BookForm } from '../pages/BookForm';
+import { PrivateRoute } from './PrivateRoute';
+
+export function AppRoutes() {
+  return (
+    <Routes>
+      {/* Rotas Públicas */}
+      <Route path="/" element={<Navigate to="/books" replace />} />
+      <Route path="/login" element={<Login />} />
+
+      {/* Rotas Privadas (Protegidas) */}
+      <Route element={<PrivateRoute />}>
+        <Route path="/books" element={<BookList />} />
+        <Route path="/books/new" element={<BookForm />} />
+        <Route path="/books/:id/edit" element={<BookForm />} />
+      </Route>
+
+      {/* Rota Fallback */}
+      <Route path="*" element={<Navigate to="/books" replace />} />
+    </Routes>
+  );
+}
