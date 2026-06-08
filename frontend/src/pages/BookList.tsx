@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { api } from '../services/api';
 import { Link } from 'react-router-dom';
-import { Search, Plus, BookOpen, Loader2, Pencil, Trash2 } from 'lucide-react';
+import { Search, Plus, BookOpen, Pencil, Trash2 } from 'lucide-react';
+import { ConfirmModal } from '../components/ConfirmModal';
 
 export interface IBook {
     id: number;
@@ -15,20 +16,29 @@ export function BookList() {
     const [books, setBooks] = useState<IBook[]>([]);
     const [loading, setLoading] = useState(true);
     const [search, setSearch] = useState('');
-    const [deletingId, setDeletingId] = useState<number | null>(null);
+
+    const [bookToDelete, setBookToDelete] = useState<number | null>(null);
+    const [isDeleting, setIsDeleting] = useState(false);
 
     useEffect(() => {
+        const abortController = new AbortController();
+
         const timer = setTimeout(() => {
-            fetchBooks();
+            fetchBooks(abortController.signal);
         }, 400);
-        return () => clearTimeout(timer);
+
+        return () => {
+            clearTimeout(timer);
+            abortController.abort();
+        };
     }, [search]);
 
-    async function fetchBooks() {
+    async function fetchBooks(signal?: AbortSignal) {
         setLoading(true);
         try {
             const response = await api.get('/books', {
-                params: search ? { title: search } : {}
+                params: search ? { title: search } : {},
+                signal
             });
 
             if (response.data.content) {
@@ -38,23 +48,34 @@ export function BookList() {
             } else {
                 setBooks([]);
             }
-        } catch (error) {
+        } catch (error: any) {
+            if (error.name === 'CanceledError' || error.message?.includes('canceled')) {
+                return;
+            }
             console.error("Erro ao buscar livros:", error);
         } finally {
-            setLoading(false);
+            if (!signal?.aborted) {
+                setLoading(false);
+            }
         }
     }
 
-    async function handleDelete(id: number) {
-        if (!confirm('Tem certeza que deseja excluir este livro?')) return;
-        setDeletingId(id);
+    function confirmDelete(id: number) {
+        setBookToDelete(id);
+    }
+
+    async function handleDeleteConfirm() {
+        if (!bookToDelete) return;
+
+        setIsDeleting(true);
         try {
-            await api.delete(`/books/${id}`);
-            setBooks(prev => prev.filter(b => b.id !== id));
+            await api.delete(`/books/${bookToDelete}`);
+            setBooks(prev => prev.filter(b => b.id !== bookToDelete));
+            setBookToDelete(null);
         } catch (error) {
             console.error("Erro ao excluir livro:", error);
         } finally {
-            setDeletingId(null);
+            setIsDeleting(false);
         }
     }
 
@@ -75,7 +96,6 @@ export function BookList() {
         return gradients[Math.abs(hash) % gradients.length];
     };
 
-    // Gera iniciais do título para "capa" do livro
     const getInitials = (title: string) => {
         return title
             .split(' ')
@@ -160,35 +180,29 @@ export function BookList() {
                     )}
                 </div>
             ) : (
-                /* Grid de livros */
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
                     {books.map((book) => (
                         <div
                             key={book.id}
                             className="group relative flex flex-col rounded-2xl overflow-hidden bg-white/[0.02] border border-white/[0.05] hover:border-white/[0.12] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-black/30"
                         >
-                            {/* Capa visual do livro */}
                             <div className={`relative h-44 w-full bg-gradient-to-br ${getCoverGradient(book.title)} flex items-center justify-center overflow-hidden`}>
-                                {/* Padrão decorativo */}
                                 <div className="absolute inset-0 opacity-10">
                                     <div className="absolute top-4 right-4 w-24 h-24 border border-white/30 rounded-full" />
                                     <div className="absolute bottom-6 left-6 w-16 h-16 border border-white/20 rounded-full" />
                                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 border border-white/10 rounded-full" />
                                 </div>
 
-                                {/* Iniciais do livro como "capa" */}
                                 <span className="text-5xl font-black text-white/20 select-none tracking-widest">
                                     {getInitials(book.title)}
                                 </span>
 
-                                {/* Título sobre a capa */}
                                 <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/60 to-transparent">
                                     <h3 className="text-base font-bold text-white leading-snug line-clamp-2">
                                         {book.title}
                                     </h3>
                                 </div>
 
-                                {/* Ações rápidas no hover */}
                                 <div className="absolute top-3 right-3 flex gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                                     <Link
                                         to={`/books/${book.id}/edit`}
@@ -198,21 +212,15 @@ export function BookList() {
                                         <Pencil className="w-3.5 h-3.5" />
                                     </Link>
                                     <button
-                                        onClick={(e) => { e.preventDefault(); handleDelete(book.id); }}
-                                        disabled={deletingId === book.id}
-                                        className="w-8 h-8 rounded-lg bg-black/40 backdrop-blur-sm flex items-center justify-center text-white/70 hover:text-red-400 hover:bg-red-500/20 transition-all disabled:opacity-50 cursor-pointer"
+                                        onClick={(e) => { e.preventDefault(); confirmDelete(book.id); }}
+                                        className="w-8 h-8 rounded-lg bg-black/40 backdrop-blur-sm flex items-center justify-center text-white/70 hover:text-red-400 hover:bg-red-500/20 transition-all cursor-pointer"
                                         title="Excluir"
                                     >
-                                        {deletingId === book.id ? (
-                                            <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                                        ) : (
-                                            <Trash2 className="w-3.5 h-3.5" />
-                                        )}
+                                        <Trash2 className="w-3.5 h-3.5" />
                                     </button>
                                 </div>
                             </div>
 
-                            {/* Info do livro */}
                             <div className="p-5 flex flex-col flex-1">
                                 <p className="text-cyan-400/80 text-sm font-medium">{book.author}</p>
                                 <p className="text-slate-600 text-xs mt-0.5 font-semibold tracking-wide">{book.year}</p>
@@ -226,6 +234,15 @@ export function BookList() {
                     ))}
                 </div>
             )}
+
+            <ConfirmModal
+                isOpen={bookToDelete !== null}
+                title="Excluir Livro"
+                message="Tem certeza que deseja excluir este livro permanentemente da sua biblioteca? Esta ação não pode ser desfeita."
+                isLoading={isDeleting}
+                onConfirm={handleDeleteConfirm}
+                onCancel={() => !isDeleting && setBookToDelete(null)}
+            />
         </div>
     );
 }
