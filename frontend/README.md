@@ -1,32 +1,36 @@
-# 🎨 Frontend — Book Manager UI
+# Frontend - Book Manager UI
 
-Interface de usuário desenvolvida como uma Single Page Application (SPA), desenhada para proporcionar uma experiência fluida, responsiva e focada na produtividade.
+A interface de usuário foi concebida como uma Single Page Application (SPA), focada em proporcionar uma experiência fluida, responsiva e agradável para gerenciar o acervo de livros.
 
-## 🛠️ Stack Tecnológica
+## Stack Tecnológica
 
-* React (via Vite)
+* React (construído via Vite)
 * TypeScript
-* Tailwind CSS
-* React Hook Form + Zod (Validação)
-* Axios (Integração)
+* Tailwind CSS para estilização utilitária
+* React Hook Form + Zod para manipulação e validação de formulários
+* Axios para integração HTTP
 
-## 💡 Decisões de UI/UX
+## Decisões de Engenharia e UX
 
-* **Estética Minimalista:** Adoção de um tema escuro (Dark Mode) padronizado para reduzir o cansaço visual e transmitir sofisticação.
-* **Validação Antecipada:** O uso do esquema de validação Zod bloqueia formulários inválidos e fornece feedback imediato (toasts) antes de gerar carga de rede desnecessária para a API.
-* **Componentização:** Arquitetura modular visando a escalabilidade, facilitando a reutilização de componentes visuais complexos, como os formulários de criação e edição.
-* **Resiliência a Frio:** Implementação de interceptadores HTTP globais que detectam a demora da resposta da API (Cold Starts) e notificam ativamente o usuário, evitando abandono da página.
+Durante o desenvolvimento do frontend, tomei algumas decisões visando a escalabilidade do código e a experiência do usuário final:
 
-## ▶️ Execução Local (Sem Docker)
+* **Estética Minimalista e Dark Mode:** Padronizei a aplicação em um tema escuro. Além de reduzir o cansaço visual, transmite um tom de sofisticação e foca a atenção nos dados que importam.
+* **Validação Antecipada (Zod):** Antes de enviar qualquer requisição para a API, o esquema de validação do Zod barra formulários incorretos localmente e fornece feedback imediato na tela (via toasts). Isso poupa tráfego de rede desnecessário e melhora o tempo de resposta percebido.
+* **Componentização Inteligente:** Construí a aplicação de forma modular. Formulários de criação, edição, botões e controles de paginação são componentes reutilizáveis, mantendo a base de código limpa e facilitando futuras expansões.
+* **Resiliência de Rede:** Implementei interceptadores globais no Axios que detectam respostas demoradas da API. Em ambientes de hospedagem gratuitos sujeitos a "cold starts" (como o Render), o usuário é notificado ativamente de que o servidor está "acordando", evitando que ele ache que a aplicação travou e abandone a página.
 
-Para rodar a interface isoladamente:
+## Execução Local (Sem Docker)
 
-1. Instale as dependências:
+Se você preferir rodar a interface web isoladamente da API na sua máquina local:
+
+1. Instale as dependências do projeto:
 ```bash
 npm install
 ```
-2. Inicie o servidor de desenvolvimento:
+
+2. Inicie o servidor de desenvolvimento do Vite:
 ```bash
 npm run dev
 ```
-3. A aplicação estará disponível em `http://localhost:5173`.
+
+3. A aplicação estará rodando na porta padrão do Vite em `http://localhost:5173`.

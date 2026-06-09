@@ -31,4 +31,9 @@ public class Book {
 
     @Column(columnDefinition = "TEXT")
     private String description;
+
+    @jakarta.persistence.ManyToOne(fetch = jakarta.persistence.FetchType.LAZY)
+    @jakarta.persistence.JoinColumn(name = "user_id", nullable = false)
+    @com.fasterxml.jackson.annotation.JsonIgnore
+    private User user;
 }

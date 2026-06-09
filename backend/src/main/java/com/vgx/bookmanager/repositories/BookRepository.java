@@ -5,7 +5,14 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import com.vgx.bookmanager.entities.User;
+import java.util.Optional;
+
 public interface BookRepository extends JpaRepository<Book, Long> {
 
-    Page<Book> findByTitleContainingIgnoreCase(String title, Pageable pageable);
+    Page<Book> findByUser(User user, Pageable pageable);
+
+    Page<Book> findByUserAndTitleContainingIgnoreCase(User user, String title, Pageable pageable);
+
+    Optional<Book> findByIdAndUser(Long id, User user);
 }
