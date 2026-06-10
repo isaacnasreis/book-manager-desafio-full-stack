@@ -12,6 +12,8 @@ O sistema é dividido em duas frentes. Caso queira se aprofundar nos detalhes t�
 
 * [Acesse a Aplicação em Produção (Vercel) ➔](https://book-manager-isnr.vercel.app/)
 * [Acesse o Swagger da API em Produção (Render) ➔](https://book-manager-backend-pys9.onrender.com/swagger-ui.html)
+
+>**Aviso Importante sobre Produção:** Como a API está hospedada no plano gratuito do Render, a plataforma desliga o servidor após um tempo de inatividade. Se o primeiro acesso ou login demorar cerca de 50 segundos, é apenas o backend "acordando". O próprio frontend já possui um tratamento que avisa você na tela caso isso aconteça.
 * [Documentação do Backend (API) ➔](./backend/README.md)
 * [Documentação do Frontend (Interface) ➔](./frontend/README.md)
 * [Postman Collection para Testes ➔](./docs/book-manager-collection.json)
